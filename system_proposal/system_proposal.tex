@@ -45,6 +45,12 @@
 \end{itemize}
 
 
-
+%7番
+\section{インターフェース}
+本システムではサーバーと会社の管理端末間，および社員のスマートフォン端末において
+HTTPS通信を行い，データのやり取りにはREST APIを使用する．データ形式はJSONを使用する．
+サーバーはAIエージェントとのやりとりを行う必要がある．
+AIエージェントには\verb|Google Gemini API|を使用し通信はHTTPSにより行う．
+データのやり取りは\verb|Google Gemini API|のAPIに従って行う．
 
 \end{document}
