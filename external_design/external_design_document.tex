@@ -7,9 +7,10 @@
   basicstyle=\ttfamily,
 }
 
+
 \begin{document}
 
-\title{システム提案書}
+\title{外部提案書}
 
 \author{KRYMAS}
 
@@ -21,7 +22,7 @@
 \tableofcontents
 \clearpage
 
-
+\section{データベース}
 \subsection{ログイン・プロフィール}
         \begin{table}[h]
         \centering
@@ -32,7 +33,7 @@
         \hline
          password & VARCHAR & 20 & 〇 &  &パスワード \\
          petName& VARCHAR & 10 & 〇 &  &ペット名\\
-         mailAddress & VARCHAR & 50 & 〇 &  &メールアドレス\\
+         社員ID\&企業コード & VARCHAR & 50 & 〇 &  &社員ID\&企業コード\\
         \hline
         \end{tabular}
         \end{table}
@@ -59,7 +60,7 @@
         変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
         \hline
          password & VARCHAR & 20 & 〇 &  &パスワード \\
-         mailAddress & VARCHAR & 50 & 〇 &  &メールアドレス\\
+         社員ID\&企業コード & VARCHAR & 50 & 〇 &  & 社員ID\&企業コード\\
          auCode& VARCHAR & 4 & 〇 &  &認証コード\\
         \hline
         \end{tabular}
@@ -85,8 +86,8 @@
         \end{tabular}
         \end{table}
 
-        \setcounter{section}
-\setcounter{subsection}
+% \setcounter{section}
+% \setcounter{subsection}
 
 \subsection{企業情報}
 
