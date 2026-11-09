@@ -22,4 +22,67 @@
 \clearpage
 
 
+\subsection{ログイン・プロフィール}
+        \begin{table}[h]
+        \centering
+        \caption{初回利用設定機能}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         password & VARCHAR & 20 & 〇 &  &パスワード \\
+         petName& VARCHAR & 10 & 〇 &  &ペット名\\
+         mailAddress & VARCHAR & 50 & 〇 &  &メールアドレス\\
+        \hline
+        \end{tabular}
+        \end{table}
+
+        \begin{table}[h]
+        \centering
+        \caption{ログイン・ログアウト}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         ID & VARCHAR & 50 & 〇 &  &ログインID \\
+         password& VARCHAR & 20 & 〇 &  &パスワード\\
+        \hline
+        \end{tabular}
+        \end{table}
+
+%%ここからやる
+        \begin{table}[h]
+        \centering
+        \caption{パスワード管理機能}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         password & VARCHAR & 20 & 〇 &  &パスワード \\
+         mailAddress & VARCHAR & 50 & 〇 &  &メールアドレス\\
+         auCode& VARCHAR & 4 & 〇 &  &認証コード\\
+        \hline
+        \end{tabular}
+        \end{table}
+
+        \begin{table}[h]
+        \centering
+        \caption{プロフィール管理機能}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         length & INTERGER & 3 & 〇 & 0より大きい &身長 \\
+         weight & INTERGER & 3 & 〇 & 0より大きい &体重\\
+         gender& NCHAR & 3 & 〇 & 選択肢を制限 &性別\\
+         experience& VARCHAR & 255 & 〇 & 選択肢を制限 &運動経験\\
+         likefood& VARCHAR & 255 &  &  &食事の好み\\
+         request& VARCHAR & 255 &  &  &要望（アレルギー等）\\
+         freetime& VARCHAR & 255 &  &  &空き時間\\
+         petName& VARCHAR & 10 & 〇 &  &ペット名\\
+         target& VARCHAR & 255 & 〇 &  &目標設定\\
+        \hline
+        \end{tabular}
+        \end{table}
+
 \end{document}
