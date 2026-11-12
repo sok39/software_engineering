@@ -942,4 +942,59 @@ AI提案候補情報に保存します。\\ \hline
         \end{tabular}
         \end{table}
 
+\subsection{ペット育成機能}
+        \begin{table}[h]
+        \centering
+        \caption{ペット育成機能(個人用)}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         userid & INTEGER & 20 & 〇 &  & ユーザーid \\%主キー、外部キー
+         experience & INTEGER & 10 & 〇 & 0以上10億未満 & 累積経験値 \\
+         petLevel & INTEGER & 2 & 〇 &  & ペットのレベル \\
+         petTypeld & INTEGER & 2 & 〇 & & ペットの種類 \\%ペットのタイプはおそらく一桁で大丈夫だが、増えることを考えて
+        \hline
+        \end{tabular}
+        \end{table}
+
+        \begin{table}[h]
+        \centering
+        \caption{ペット育成機能(企業用)}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         companyid & INTEGER & 20 & 〇 &  & ユーザーid \\%主キー、外部キー
+         companyExperience & INTEGER & 10 & 〇 & 0以上10億未満 & 累積経験値 \\
+         companyPetLevel & INTEGER & 2 & 〇 &  & ペットのレベル \\
+         companyPetTypeld & INTEGER & 2 & 〇 & & ペットの種類 \\%ペットのタイプはおそらく一桁で大丈夫だが、増えることを考えて
+        \hline
+        \end{tabular}
+
+        \begin{table}[h]
+        \centering
+        \caption{ペット情報}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         petTypeld & INTEGER & 20 & 〇 &  & ペットのid \\%主キー、外部キー
+         petName & VARCHAR & 50 & 〇 & ペットの名前 \\
+        \hline
+        \end{tabular}
+        \end{table}
+
+%9
+\section{ネットワーク設計}
+(参照)は本システムにおけるネットワーク構成である。
+アプリケーションの実行基盤となるWebサーバーは
+AWS(Amazon\ Web\ Services)上に構築する。
+データベースも同様である。
+利用者は利用者用端末からモバイル通信やWi-Fiを用いてWebサーバーと
+通信を行う。
+Webサーバーはデータベースサーバに格納されている情報を利用、
+また必要に応じてGoogle\ Gemini\ APIを利用し、
+様々な情報を提供する。
+
 \end{document}
