@@ -994,7 +994,7 @@ AI提案候補情報に保存します。\\ \hline
 
 %9
 \section{ネットワーク設計}
-(参照)は本システムにおけるネットワーク構成である。
+\ref{fig:2}はにおけるネットワーク構成である。
 アプリケーションの実行基盤となるWebサーバーは
 AWS(Amazon\ Web\ Services)上に構築する。
 データベースも同様である。
@@ -1003,5 +1003,12 @@ AWS(Amazon\ Web\ Services)上に構築する。
 Webサーバーはデータベースサーバに格納されている情報を利用、
 また必要に応じてGoogle\ Gemini\ APIを利用し、
 様々な情報を提供する。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Gemini_Generated_Image_ozjf6sozjf6sozjf.jpeg}
+    \caption{ネットワーク設計}
+    \label{fig:2}
+\end{figure}
 
 \end{document}
