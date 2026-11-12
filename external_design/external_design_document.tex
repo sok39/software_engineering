@@ -764,4 +764,62 @@ AI提案候補情報に保存します。\\ \hline
 タスク・達成状況情報に保存します。\\ \hline
 \end{longtable}
 
+\subsection{生活習慣管理・AI提案機能}
+        \begin{table}[h]
+        \centering
+        \caption{睡眠管理}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         sleeptime & VARCHAR & 4 & 〇 &  &就寝時間 \\
+         getuptime & VARCHAR & 4 & 〇 &  &起床時間\\
+         condition & VARCHAR & 3 & 〇 & & 休養感（良　普　悪）\\
+        \hline
+        \end{tabular}
+        \end{table}
+
+
+        \begin{table}[h]
+        \centering
+        \caption{食事管理}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         photo & BLOB & 4 &  &  &写真 \\ %写真の定義の仕方わからん
+         kcal & VARCHAR & 4 &  &  &摂取カロリー\\
+         balance & VARCHAR & 255 &  & & PFCバランス\\
+        \hline
+        \end{tabular}
+        \end{table}
+
+
+        \begin{table}[h]
+        \centering
+        \caption{運動管理機能}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         ex\_plan & VARCHAR & 4 & 〇 &  &運動の実施予定 \\
+         ex\_type & VARCHAR & 4 & 〇 &  &運動の種類\\
+         consume\_kcal & VARCHAR & 3 & 〇 & & 消費カロリー\\
+        \hline
+        \end{tabular}
+        \end{table}
+
+        \begin{table}[h]
+        \centering
+        \caption{体重管理機能}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         date & VARCHAR & 8 & 〇 &  &測定日 \\
+         weight & VARCHAR & 3 & 〇 &  &体重\\
+        \hline
+        \end{tabular}
+        \end{table}
+
 \end{document}
