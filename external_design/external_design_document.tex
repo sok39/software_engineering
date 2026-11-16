@@ -992,6 +992,24 @@ AI提案候補情報に保存します。\\ \hline
         \end{tabular}
         \end{table}
 
+        \begin{table}[h]
+        \centering
+        \caption{ペット情報（個人）}
+        \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
+        \hline
+         userid & INTEGER & 20 & 〇 & & 個人を特定するためのuserid
+         pet1Get & INTEGER & 24 & 〇 &  & 8ケタ(ゲット日)、8ケタ(進化日)、8ケタ(進化日) \\
+         pet1Experience & INTEGER & 10 & & ペット1の累計経験値
+         pet2Get & INTEGER & 24 & 〇 &  & 8ケタ(ゲット日)、8ケタ(進化日)、8ケタ(進化日) \\
+         pet2Experience & INTEGER & 10 & & ペット2の累計経験値
+         pet3Get & INTEGER & 24 & 〇 &  & 8ケタ(ゲット日)、8ケタ(進化日)、8ケタ(進化日) \\
+         pet3Experience & INTEGER & 10 & & ペット3の累計経験値
+         \hline
+        \end{tabular}
+        \end{table}
+
 %9
 \section{ネットワーク設計}
 \ref{fig:2}はにおけるネットワーク構成である。
