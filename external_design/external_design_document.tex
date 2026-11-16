@@ -1,6 +1,9 @@
-\documentclass[uplatex,dvipdfmx]{jlreq}
-%\documentclass{jlreq}
+%\documentclass[uplatex,dvipdfmx]{jlreq}
+\documentclass{jlreq}
 \usepackage{amsmath,amssymb, listings, graphicx, float, hyperref, subcaption}
+\usepackage{longtable}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \lstset{
   frame=single,
@@ -978,6 +981,7 @@ AI提案候補情報に保存します。\\ \hline
          companyPetTypeld & INTEGER & 2 & 〇 & & ペットの種類 \\%ペットのタイプはおそらく一桁で大丈夫だが、増えることを考えて
         \hline
         \end{tabular}
+        \end{table}
 
         \begin{table}[h]
         \centering
@@ -1004,7 +1008,7 @@ Webサーバーはデータベースサーバに格納されている情報を�
 また必要に応じてGoogle\ Gemini\ APIを利用し、
 様々な情報を提供する。
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{Gemini_Generated_Image_ozjf6sozjf6sozjf.jpeg}
     \caption{ネットワーク設計}
