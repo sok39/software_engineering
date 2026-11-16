@@ -79,6 +79,20 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 \end{figure}
 
 %3
+\documentclass{jlreq}
+\usepackage{amsmath,amssymb, listings, graphicx, float, hyperref, subcaption}
+
+\begin{document}
+
+\title{}
+\author{}
+\date{\today}
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\clearpage
+
 \section{サブシステム}
 \subsection{サブシステムの概要}
 本システムは、利用者、導入企業、システム運営側企業の3つの立場から利用することを想定し、それぞれの役割に応じたサブシステムで構成する。
@@ -141,6 +155,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     すべての設定が完了した段階で、利用者に紐付く個人用ペットを1匹選択し、ペットの名前を設定する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) ログイン・ログアウト機能}
 
 \begin{description}
@@ -153,6 +174,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     また、利用者がログアウトを選択した場合はログイン状態を解除し、ログイン画面に遷移する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(c) プロフィール管理機能}
 
 \begin{description}
@@ -163,6 +191,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     健康診断の結果は写真で撮影し、個人情報が映らないように自身でトリミングを行った写真をアップロードする。
     その初心をAIが読み取り、読み取った結果を利用者に確認してもらい、編集または登録を行う。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 上記の処理で編集を選択した場合または、登録後に変更を行う場合、以下の処理に移る。
 
@@ -175,6 +210,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     編集された情報をデータベースに保存する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(d) パスワード変更機能}
 
 \begin{description}
@@ -185,14 +227,29 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     変更・再設定されたパスワードはハッシュ化を行い、データベースに安全に保存する。
 \end{description}
 
-パスワードを忘れた場合には、以下の処理を行う。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
+\subsubsection*{(e) パスワード再設定機能}
 \begin{description}
     \item[入力：] ログインID、メールアドレス、認証コード、新しいパスワード
     \item[出力：] パスワード変更結果
     \item[処理：]
+    パスワードを忘れた場合にパスワードを変更できるようにする。
     利用者がログインIDとをメールアドレスを入力し、メースアドレスから本人認証を行う。
     本人認証ができれば、パスワードを変更できる。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{健康情報管理サブシステム}
 
@@ -212,6 +269,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     また、記録するごとにペットへ経験値を付与する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) 健康情報振り返り機能}
 
 \begin{description}
@@ -227,6 +291,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     タスクの達成度は、運動・睡眠・食事で設定したタスクを、「達成したタスク数/設定した全てのタスク数」で表示する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(c) 健康情報変更・削除機能}
 
 \begin{description}
@@ -236,6 +307,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     利用者が登録済みの健康情報に誤りがあった場合、該当する情報を変更または削除できるようにする。
     変更の場合は新しい情報でデータベースを更新し、削除の場合は対象の情報を削除する。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{長期目標・タスク管理サブシステム}
 
@@ -254,6 +332,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     また、設定された目標は日々のタスク生成に利用する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) 長期目標変更機能}
 
 \begin{description}
@@ -263,6 +348,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     利用者が設定済みの長期目標を変更できるようにする。
     利用者の健康診断の結果、利用者の希望に応じて目標内容を更新し、変更後の目標をデータベースに保存する。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsubsection*{(c) AI食事メニュー提案機能}
 
@@ -275,6 +367,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     提案されたメニューを画面に表示し、日々の食生活の改善を支援する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(d) AI運動メニュー提案機能}
 
 \begin{description}
@@ -286,6 +385,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     提案された運動内容や実施時間を画面に表示し、無理のない運動習慣の形成を支援する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(e) 日次タスク生成機能}
 
 \begin{description}
@@ -295,6 +401,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     利用者の長期目標やプロフィール情報、利用者の希望に基づいて、AIが当日に取り組むべきタスクを生成する。
     運動、睡眠、食事のそれぞれの項目で、日ごとにタスクを設定する。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{ペット育成サブシステム}
 
@@ -313,6 +426,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     経験値が一定値に達した場合、ペットのレベルを上げ、成長状態を更新する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) ペット成長履歴管理機能}
 
 \begin{description}
@@ -323,6 +443,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     育てたことのないペットについては、クエスチョンマークを表示し、閲覧できないこととする。
     登録されているペットを選択すると、ペットの名前、育て始めた日、成長・進化の記録、性格、好きなものなどの詳細な情報が確認できる。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{企業共有ペット閲覧サブシステム}
 
@@ -339,6 +466,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     利用者が所属する企業に設定されている企業共有ペットの情報を取得し、名前や現在のレベル、経験値などを画面に表示する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) 社員貢献度ランキング閲覧機能}
 
 \begin{description}
@@ -348,6 +482,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     社員の日次タスクの達成状況をもとに貢献度ポイントを集計し、企業内で貢献度の高い上位10名をランキング形式で表示する。
     また、各社員の順位や個人用ペット名、貢献度ポイントを確認できるようにする。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{社員アカウント管理サブシステム}
 
@@ -367,6 +508,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     初期ログイン情報は、社員が初回ログインできるように本人のメールアドレス宛てに通知する。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) 社員アカウント編集機能}
 
 \begin{description}
@@ -377,6 +525,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     利用ステータスは、利用中、利用停止中、利用終了の3つから選択する。
     利用停止中、利用終了の社員はシステムにログインできないようにする。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{企業健康状況管理サブシステム}
 
@@ -394,6 +549,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     社員ごとのタスクの達成情報を集計し、企業全体の平均達成率を算出し、表示する。
     個々の社員の詳細な健康情報は表示せず、集計された情報のみを管理する。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{企業共有ペット管理サブシステム}
 
@@ -413,6 +575,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     なお、対象者がいない場合はレベルを変更しない。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) 企業共有ペット成長履歴管理機能}
 
 \begin{description}
@@ -423,6 +592,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     育てたことのないペットについては、クエスチョンマークを表示し、閲覧できないこととする。
     登録されているペットを選択すると、ペットの名前、育て始めた日、成長・進化の記録、性格、好きなものなどの詳細な情報が確認できる。
 \end{description}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
 
 \subsection{企業情報管理サブシステム}
 
@@ -444,6 +620,13 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     利用前、利用停止中、契約終了は、その企業に所属する社員や企業管理者がシステムを利用できないようにする。
 \end{description}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
+    \label{fig:1}
+\end{figure}
+
 \subsubsection*{(b) 企業情報変更機能}
 
 \begin{description}
@@ -458,12 +641,12 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{プロフィール管理機能.png}
-    \caption{プロフィール管理機能}
+    \includegraphics[width=0.8\linewidth]{初回利用設定機能.png}
+    \caption{初回利用設定機能}
     \label{fig:1}
 \end{figure}
 
-
+\end{document}
 %7
 \section{運用・保守}
 上記の非機能要件より、前提として本システムはAWSで構築する。
