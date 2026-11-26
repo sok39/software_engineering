@@ -477,7 +477,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{社員アカウント登録機能.png}
+    \includegraphics[width=0.8\linewidth]{社員アカウント登録機能_フロー.png}
     \caption{社員アカウント登録機能}
 \end{figure}
 
@@ -494,7 +494,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{社員管理機能.png}
+    \includegraphics[width=0.8\linewidth]{社員管理機能_フロー.png}
     \caption{社員アカウント編集機能}
 \end{figure}
 
@@ -517,7 +517,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{タスク達成度集計機能.png}
+    \includegraphics[width=0.8\linewidth]{タスク達成度集計機能_フロー.png}
     \caption{タスク達成状況集計機能}
 \end{figure}
 
@@ -541,7 +541,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{企業ペット成長管理機能.png}
+    \includegraphics[width=0.8\linewidth]{企業ペット成長管理機能_フロー.png}
     \caption{企業用ペット成長管理機能}
 \end{figure}
 
@@ -727,9 +727,13 @@ Amazon\ CloudWatch\ Logsによりエラーログや
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{管理者_社員管理画面(検索前).png}
+    \IfFileExists{管理者_社員管理画面(検索前).png}{%
+        \includegraphics[width=0.8\linewidth]{管理者_社員管理画面(検索前).png}%
+    }{%
+        \fbox{検索前の画面画像は未添付}%
+    }
     \caption{管理者\_社員管理画面(検索前)}
-\end{figure
+\end{figure}
 
 \begin{figure}[H]
     \centering
