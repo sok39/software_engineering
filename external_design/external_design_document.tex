@@ -394,6 +394,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     \item[処理：]
     健康情報管理サブシステムからタスクの達成状況と記録の有無を受け取り、ペットに経験値を付与する。
     経験値が一定値に達した場合、ペットのレベルを上げる。ペットのレベルが一定値に達したら成長状態を更新する。
+    レベルが6または10のときに、それぞれペットの見た目が変わり、進化する。
 \end{description}
 
 \begin{figure}[htbp]
@@ -466,11 +467,11 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
 \subsubsection*{(a) 社員アカウント登録機能}
 
 \begin{description}
-    \item[入力：] 社員番号、生年月日（初期パスワード）、メールアドレス
+    \item[入力：] 社員番号、ランダムパスワード（初期パスワード）、メールアドレス
     \item[出力：] アカウント登録結果
     \item[処理：]
     管理者が入力内容をCSVファイルにまとめて入力し、社員のアカウントを新規登録する。
-    また、社員番号を利用者IDとして設定し、生年月日を初期パスワードとして設定する。
+    また、社員番号を利用者IDとして設定し、ランダムパスワードを生成し、初期パスワードとして設定する。
     初期ログイン情報は、社員が初回ログインできるように本人のメールアドレス宛てに通知する。
 \end{description}
 
@@ -488,7 +489,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     \item[処理：]
     利用ステータス以外の情報は編集できないとし、退職や休職、復職などに応じて、社員アカウントのステータスを変更する。
     利用ステータスは、利用中、利用停止中、利用終了の3つから選択する。
-    利用停止中、利用終了の社員はシステムにログインできないようにする。
+    利用停止中、利用終了の社員はシステムにログインできないようにする。休職中などは利用停止中とし、退職などは利用終了となる。
 \end{description}
 
 \begin{figure}[htbp]
@@ -677,6 +678,8 @@ Amazon\ CloudWatch\ Logsによりエラーログや
 さらなる改善案や保守計画へ利用する。
 
 \section{ユーザーインタフェース}
+
+\subsection{運営者}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{運営者＿ホーム画面.png}
@@ -701,6 +704,7 @@ Amazon\ CloudWatch\ Logsによりエラーログや
     \caption{運営者\_企業編集画面}
 \end{figure}
 
+\subsection{管理者}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{管理者＿ホーム画面.png}
@@ -737,6 +741,7 @@ Amazon\ CloudWatch\ Logsによりエラーログや
     \caption{管理者\_社員編集画面}
 \end{figure}
 
+\subsection{共通}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{共通＿パスワードを忘れ画面.png}
@@ -809,6 +814,7 @@ Amazon\ CloudWatch\ Logsによりエラーログや
     \caption{共通\_編集完了画面}
 \end{figure}
 
+\subsection{利用者}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{利用者＿チャット画面.png}
