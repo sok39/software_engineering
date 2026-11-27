@@ -1,9 +1,35 @@
 %\documentclass[uplatex,dvipdfmx]{jlreq}
 \documentclass{jlreq}
 \usepackage{amsmath,amssymb, listings, graphicx, float, hyperref, subcaption}
+\usepackage{luatexja}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{geometry}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{enumitem}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\renewcommand{\tablename}{表}
+\newcommand{\DBTable}[2]{%
+\small
+\begin{longtable}{|>{\raggedright\arraybackslash}p{0.19\textwidth}|
+                    >{\raggedright\arraybackslash}p{0.16\textwidth}|
+                    >{\raggedright\arraybackslash}p{0.23\textwidth}|
+                    >{\raggedright\arraybackslash}p{0.30\textwidth}|}
+  \caption{#1}\\
+  \hline
+  \textbf{カラム名} & \textbf{データタイプ} & \textbf{制約条件} & \textbf{説明・補足}\\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{カラム名} & \textbf{データタイプ} & \textbf{制約条件} & \textbf{説明・補足}\\
+  \hline
+  \endhead
+  #2
+\end{longtable}
+\normalsize
+}
 
 \lstset{
   frame=single,
@@ -606,77 +632,7 @@ UIは後の説明で登場するが、ホーム画面、食事画面、運動画
     \caption{企業情報変更機能のフロー図}
 \end{figure}
 
-% \end{document}
-%7
-\section{運用・保守}
-上記の非機能要件より、前提として本システムはAWSで構築する。
-したがって、24時間365日という時間はオンライン/バッチを含みシステム
-が稼働している時間である。
-
-\subsection{運用}
-まずインフラ構成についてである。
-
-システムの基盤としてAmazon\ Web\ Services(AWS)の
-クラウドサービスを利用する。
-WebサーバーにはAmazon\ EC2を採用。
-データベースサーバーにはAmazon\ RDS(MySQL)を採用。
-
-次にソフトウェア構成である。
-
-OSにはAmazon\ Linux\ 2023を採用。
-WebサーバーにはApache\ HTTP\ Serverを採用。
-%↑にはリバースプロキシも含まれる、リバースプロキシとは、画像やCSSなどの静かなファイルの処理は後ろのプログラムを動かすまでもないので、後ろにパスせずに自分でこなすというもの
-APサーバー/実行環境にはPython\ /\ FastAPIを採用。
-DBMS(データベース接続)にはMySQLを採用。
-AI連携にはGoogle\ Gemini\ APIを採用する。
-
-システムの安定稼働のために以下のように異常を検知する。
-システムのログおよびパフォーマンスデータはAmazon\ CloudWatchにて
-集約し監視する。
-リソースの閾値超過を検知、アプリケーションエラーなどのを検知した場合
-CloudWatchアラームの作動をトリガーとして異常検知を行う。
-異常検知された場合担当者に電子メールでアラート通知を送信する。
-
-次にバックアップについてである。
-データの消失や市捨てて無障害に備え定期的にバックアップを取得する。
-データベースではAmazon\ RDSの自動バックアップ機能を利用。
-1日毎にバックアップを取得。
-バックアップの保存期間は1カ月間とする。
-
-%EC2はバックエンド（ウェブサーバー）
-EC2のストレージ(EBS)に対しては定期的にスナップショットを取得、
-OS設定やアプリケーション環境の保全を行う。
-
-次にシステムの改修やアップデートなど大きな変更を加える際には、
-実施の前にスナップショットを取得しておき、不具合の発生時には
-ロールバックが行えるようにする。
-
-契約企業からの問い合わせは専用メールアドレスにて受け付け、
-内容を確認後、システムに起因するエラーと判断されれば
-原因調査・修正を迅速に行う。
-即時対応を要しないものについては社内協議の上方針を決定する。
-
-\subsection{保守}
-保守段階ではシステムの健全性を維持し、必要に応じてアップデート
-を適用するためのプロセスを明確化する。
-またアプリケーションの変更や新機能追加時には事前に
-ステージング環境でのテストを実施し、実用環境への影響を
-最小減に抑える。
-
-トラブルシューティングの迅速化を目的とし
-Amazon\ CloudWatch\ Logsによりエラーログや
-アクセスログを管理、分析し問題の兆候をできるだけ早期に発見する。
-
-アプリケーションの変更については影響範囲が十分に検討され、
-承認を適切に踏んで実施されるように変更プロセスを導入する。
-保守作業時にはメンテナンスウィンドウにより利用者に通知する。
-
-またセキュリティ面では3カ月に1回の間隔で脆弱性診断を実施、
-問題のある場合には迅速に対応する。
-
-さらに定期的にシステム利用者からフィードバックを取得し、
-さらなる改善案や保守計画へ利用する。
-
+%4
 \section{ユーザーインタフェース}
 画面遷移図を図\ref{UI_change}に示し、画面の例を以降に示す。
 
@@ -931,870 +887,296 @@ Amazon\ CloudWatch\ Logsによりエラーログや
     \caption{利用者\_利用規約同意画面}
 \end{figure}
 
-%8
+%5
+\section{運用・保守}
+上記の非機能要件より、前提として本システムはAWSで構築する。
+したがって、24時間365日という時間はオンライン/バッチを含みシステム
+が稼働している時間である。
+
+\subsection{運用}
+まずインフラ構成についてである。
+
+システムの基盤としてAmazon\ Web\ Services(AWS)の
+クラウドサービスを利用する。
+WebサーバーにはAmazon\ EC2を採用。
+データベースサーバーにはAmazon\ RDS(MySQL)を採用。
+
+次にソフトウェア構成である。
+
+OSにはAmazon\ Linux\ 2023を採用。
+WebサーバーにはApache\ HTTP\ Serverを採用。
+%↑にはリバースプロキシも含まれる、リバースプロキシとは、画像やCSSなどの静かなファイルの処理は後ろのプログラムを動かすまでもないので、後ろにパスせずに自分でこなすというもの
+APサーバー/実行環境にはPython\ /\ FastAPIを採用。
+DBMS(データベース接続)にはMySQLを採用。
+AI連携にはGoogle\ Gemini\ APIを採用する。
+
+システムの安定稼働のために以下のように異常を検知する。
+システムのログおよびパフォーマンスデータはAmazon\ CloudWatchにて
+集約し監視する。
+リソースの閾値超過を検知、アプリケーションエラーなどのを検知した場合
+CloudWatchアラームの作動をトリガーとして異常検知を行う。
+異常検知された場合担当者に電子メールでアラート通知を送信する。
+
+次にバックアップについてである。
+データの消失や市捨てて無障害に備え定期的にバックアップを取得する。
+データベースではAmazon\ RDSの自動バックアップ機能を利用。
+1日毎にバックアップを取得。
+バックアップの保存期間は1カ月間とする。
+
+%EC2はバックエンド（ウェブサーバー）
+EC2のストレージ(EBS)に対しては定期的にスナップショットを取得、
+OS設定やアプリケーション環境の保全を行う。
+
+次にシステムの改修やアップデートなど大きな変更を加える際には、
+実施の前にスナップショットを取得しておき、不具合の発生時には
+ロールバックが行えるようにする。
+
+契約企業からの問い合わせは専用メールアドレスにて受け付け、
+内容を確認後、システムに起因するエラーと判断されれば
+原因調査・修正を迅速に行う。
+即時対応を要しないものについては社内協議の上方針を決定する。
+
+\subsection{保守}
+保守段階ではシステムの健全性を維持し、必要に応じてアップデート
+を適用するためのプロセスを明確化する。
+またアプリケーションの変更や新機能追加時には事前に
+ステージング環境でのテストを実施し、実用環境への影響を
+最小減に抑える。
+
+トラブルシューティングの迅速化を目的とし
+Amazon\ CloudWatch\ Logsによりエラーログや
+アクセスログを管理、分析し問題の兆候をできるだけ早期に発見する。
+
+アプリケーションの変更については影響範囲が十分に検討され、
+承認を適切に踏んで実施されるように変更プロセスを導入する。
+保守作業時にはメンテナンスウィンドウにより利用者に通知する。
+
+またセキュリティ面では3カ月に1回の間隔で脆弱性診断を実施、
+問題のある場合には迅速に対応する。
+
+さらに定期的にシステム利用者からフィードバックを取得し、
+さらなる改善案や保守計画へ利用する。
+
+
+%6
 \section{データベース}
-\subsection{ログイン・プロフィール}
-        \begin{table}[h]
-        \centering
-        \caption{初回利用設定機能}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         password & VARCHAR & 20 & 〇 &  &パスワード \\
-         petName& VARCHAR & 10 & 〇 &  &ペット名\\
-         社員ID\&企業コード & VARCHAR & 50 & 〇 &  &社員ID\&企業コード\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-        \begin{table}[h]
-        \centering
-        \caption{ログイン・ログアウト}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         ID & VARCHAR & 50 & 〇 &  &ログインID \\
-         password& VARCHAR & 32 & 〇 &  &パスワード\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-%%ここからやる
-        \begin{table}[h]
-        \centering
-        \caption{パスワード管理機能}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         password & VARCHAR & 20 & 〇 &  &パスワード \\
-         社員ID\&企業コード & VARCHAR & 50 & 〇 &  & 社員ID\&企業コード\\
-         auCode& VARCHAR & 4 & 〇 &  &認証コード\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-        \begin{table}[h]
-        \centering
-        \caption{プロフィール管理機能}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         length & INTERGER & 3 & 〇 & 0より大きい &身長 \\
-         weight & INTERGER & 3 & 〇 & 0より大きい &体重\\
-         gender& NCHAR & 3 & 〇 & 選択肢を制限 &性別\\
-         experience& VARCHAR & 255 & 〇 & 選択肢を制限 &運動経験\\
-         likefood& VARCHAR & 255 &  &  &食事の好み\\
-         request& VARCHAR & 255 &  &  &要望（アレルギー等）\\
-         freetime& VARCHAR & 255 &  &  &空き時間\\
-         petName& VARCHAR & 10 & 〇 &  &ペット名\\
-         target& VARCHAR & 255 & 〇 &  &目標設定\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-% \setcounter{section}
-% \setcounter{subsection}
-
-\subsection{企業情報}
-
-% 契約先の企業を識別するための情報を保存します。
-% 企業名が同じ場合でも、企業IDによって区別します。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{企業情報}
-\label{tab:company}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:company}：企業情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-企業ID & company\_id & BIGINT & PK &
-企業を識別する番号です。\\ \hline
-
-企業名 & company\_name & VARCHAR(200) & 必須 &
-契約した企業の名称です。\\ \hline
-
-担当者メールアドレス & contact\_email & VARCHAR(254) & 必須 &
-契約や社員登録に関する連絡先です。\\ \hline
-
-登録日時 & created\_at & DATETIME & 必須 &
-企業情報を登録した日時です。\\ \hline
-
-更新日時 & updated\_at & DATETIME & 必須 &
-企業情報を最後に変更した日時です。\\ \hline
-\end{longtable}
-
-企業担当者の連絡先は、
-社員のログイン用メールアドレスとは用途を分けて管理します。
-
-\subsection{企業契約情報}
-
-% 企業ごとの契約人数、契約期間および契約状態を保存します。
-% 契約更新時に過去の内容を確認できるよう、
-% 企業情報とは別に管理します。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{企業契約情報}
-\label{tab:contract}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:contract}：企業契約情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-契約ID & contract\_id & BIGINT & PK &
-契約を識別する番号です。\\ \hline
-
-企業ID & company\_id & BIGINT & FK・必須 &
-契約先の企業を参照します。\\ \hline
-
-契約人数 & licensed\_count & INT & 必須・1以上 &
-利用権を付与できる社員数の上限です。\\ \hline
-
-契約開始日 & start\_date & DATE & 必須 &
-利用を開始できる日です。\\ \hline
-
-契約終了日 & end\_date & DATE & 必須 &
-利用できる最後の日です。\\ \hline
-
-契約状態 & status & VARCHAR(20) & 必須 &
-開始前・有効・停止・終了を管理します。\\ \hline
-
-登録日時 & created\_at & DATETIME & 必須 &
-契約情報の登録日時です。\\ \hline
-
-更新日時 & updated\_at & DATETIME & 必須 &
-契約情報の更新日時です。\\ \hline
-\end{longtable}
-
-% 契約終了日は契約開始日以降とします。
-% 同一企業に対して、有効な契約期間が重複しないようにします。
-
-% 社員を登録・再開する際には、
-% 契約が有効であることと、
-% 利用権を付与する人数が契約人数を超えないことを確認します。
-
-\subsection{社員利用権情報}
-
-% 社員アカウントと契約企業を関連付け、
-% 利用できる状態かどうかを保存します。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{社員利用権情報}
-\label{tab:entitlement}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:entitlement}：社員利用権情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-利用権ID & entitlement\_id & BIGINT & PK &
-社員の利用権を識別する番号です。\\ \hline
-
-利用者ID & user\_id & BIGINT & FK・必須・一意 &
-ログイン用の利用者情報を参照します。\\ \hline
-
-企業ID & company\_id & BIGINT & FK・必須 &
-社員が所属する企業です。\\ \hline
-
-利用状態 & status & VARCHAR(20) & 必須 &
-初回設定待ち・利用中・停止を管理します。\\ \hline
-
-付与日時 & granted\_at & DATETIME & 必須 &
-利用権を付与した日時です。\\ \hline
-
-停止日時 & suspended\_at & DATETIME & 任意 &
-利用権を停止した日時です。\\ \hline
-
-更新日時 & updated\_at & DATETIME & 必須 &
-利用権情報の更新日時です。\\ \hline
-\end{longtable}
-
-% 社員のメールアドレスは利用者情報に保存し、
-% 本テーブルには重複して保存しません。
-% 企業に所属する社員のメール一覧は、
-% 利用権情報と利用者情報を組み合わせて取得します。
-
-% 初回設定待ちと利用中の社員を契約人数に含め、
-% 停止中の社員は含めない設計案とします。
-% 停止した社員を再開する場合は、
-% 契約人数の空きを再確認します。
-
-% 本テーブルの利用者IDを一意とすることで、
-% 一人の利用者が同時に複数の企業の利用権を持たない構成とします。
-
-% \subsection{グループ情報}
-
-% % グループ名、所属企業、グループリーダーおよび
-% % 共有ペットとの対応を保存します。
-
-% \begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-% \caption{グループ情報}
-% \label{tab:group}\\
-% \hline
-% 項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-% \endfirsthead
-
-% \hline
-% \multicolumn{5}{|l|}{表\ref{tab:group}：グループ情報（続き）}\\
-% \hline
-% 項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-% \endhead
-
-% グループID & group\_id & BIGINT & PK &
-% グループを識別する番号です。\\ \hline
-
-% 企業ID & company\_id & BIGINT & FK・必須 &
-% グループが属する企業です。\\ \hline
-
-% グループ名 & group\_name & VARCHAR(100) & 必須 &
-% 画面に表示するグループ名です。\\ \hline
-
-% リーダー利用者ID & leader\_user\_id & BIGINT & FK・必須 &
-% グループリーダーの利用者情報を参照します。\\ \hline
-
-% 共有ペットID & shared\_pet\_id & BIGINT & FK・必須・一意 &
-% ペット情報に保存された共有ペットを参照します。\\ \hline
-
-% グループ状態 & status & VARCHAR(20) & 必須 &
-% 利用中・停止・解散を管理します。\\ \hline
-
-% 作成日時 & created\_at & DATETIME & 必須 &
-% グループを作成した日時です。\\ \hline
-
-% 更新日時 & updated\_at & DATETIME & 必須 &
-% グループ情報の更新日時です。\\ \hline
-% \end{longtable}
-
-% % リーダーのメールアドレスは、
-% % リーダー利用者IDから利用者情報を参照して取得します。
-% % リーダーのパスワードも利用者情報で管理するため、
-% % グループ情報には保存しません。
-
-% % 共有ペットの名前はペット情報に保存し、
-% % 共有ペットIDから取得します。
-% % これにより、ペット名を変更する際に
-% % 複数の保存先を変更する必要がなくなります。
-
-% % リーダーとして設定する利用者は、
-% % 当該企業の利用権を持ち、
-% % 当該グループに所属している必要があります。
-
-% \subsection{グループ所属情報}
-
-% % どの利用者がどのグループに所属しているかを保存します。
-% % グループからの退会と、
-% % 社員アカウントの利用停止は別に管理します。
-
-% \begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-% \caption{グループ所属情報}
-% \label{tab:membership}\\
-% \hline
-% 項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-% \endfirsthead
-
-% \hline
-% \multicolumn{5}{|l|}{表\ref{tab:membership}：グループ所属情報（続き）}\\
-% \hline
-% 項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-% \endhead
-
-% 所属ID & membership\_id & BIGINT & PK &
-% 所属履歴を識別する番号です。\\ \hline
-
-% グループID & group\_id & BIGINT & FK・必須 &
-% 所属先のグループです。\\ \hline
-
-% 利用者ID & user\_id & BIGINT & FK・必須 &
-% 所属する利用者です。\\ \hline
-
-% 参加日時 & joined\_at & DATETIME & 必須 &
-% グループに参加した日時です。\\ \hline
-
-% 退会日時 & left\_at & DATETIME & 任意 &
-% 退会した日時です。所属中は未設定です。\\ \hline
-% \end{longtable}
-
-% % 所属メンバーの名前とメールアドレスは、
-% % 利用者IDから取得します。
-% % 一般利用者向け画面での表示名には、
-% % 個人用ペットの名前を使用します。
-% % メールアドレスは、
-% % 管理上必要な権限を持つ利用者にのみ表示します。
-
-% % グループ退会時は退会日時を保存します。
-% % 退会によって個人の健康記録や個人用ペットを削除しません。
-% % また、グループリーダーが退会する場合は、
-% % 先に別の所属メンバーへリーダーを変更します。
-
-% % 同時に所属できるグループを一つとする場合は、
-% % 一人の利用者に対して退会日時が未設定の所属情報を
-% % 複数作成しないようにします。
-
-% % \clearpage
-
-\section{健康診断結果・目標管理機能で使用するデータ}
-
-% 本機能では、健康診断書の画像、確認済みの検査値、
-% AIが提示した目標・計画・タスクの候補、
-% 利用者が選択した内容およびタスクの達成状況を保存します。
-
-% AIが返した内容と利用者が採用した内容は区別します。
-% AIの回答を受信しただけでは、
-% 利用者の目標やタスクを変更しません。
-
-\subsection{健康診断結果情報}
-
-% 利用者が登録した健康診断書の画像と、
-% 目標設定に使用する検査値を保存します。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{健康診断結果情報}
-\label{tab:checkup}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:checkup}：健康診断結果情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-健康診断結果ID & checkup\_id & BIGINT & PK &
-健康診断結果を識別する番号です。\\ \hline
-
-利用者ID & user\_id & BIGINT & FK・必須 &
-結果を登録した利用者です。\\ \hline
-
-健康診断実施日 & examined\_on & DATE & 必須 &
-健康診断を受けた日です。\\ \hline
-
-診断書画像保存先 & image\_key & VARCHAR(512) & 必須 &
-画像保存領域に置いた診断書写真の識別情報です。\\ \hline
-
-身長 & height\_cm & DECIMAL(5,2) & 確定時必須 &
-健康診断時の身長をcmで保存します。\\ \hline
-
-体重 & weight\_kg & DECIMAL(5,2) & 確定時必須 &
-健康診断時の体重をkgで保存します。\\ \hline
-
-最低血圧 & diastolic\_bp & SMALLINT & 確定時必須 &
-拡張期血圧をmmHgで保存します。\\ \hline
-
-最高血圧 & systolic\_bp & SMALLINT & 確定時必須 &
-収縮期血圧をmmHgで保存します。\\ \hline
-
-医師等からの指示 & medical\_instruction & TEXT & 任意 &
-目標設定時に考慮する指示です。\\ \hline
-
-確認状態 & status & VARCHAR(20) & 必須 &
-読取待ち・確認待ち・確認済み・読取失敗を管理します。\\ \hline
-
-確認日時 & confirmed\_at & DATETIME & 任意 &
-利用者が内容を確認して確定した日時です。\\ \hline
-
-登録日時 & created\_at & DATETIME & 必須 &
-結果を登録した日時です。\\ \hline
-
-更新日時 & updated\_at & DATETIME & 必須 &
-結果を変更した日時です。\\ \hline
-\end{longtable}
-
-% 画像そのものは画像保存領域に置き、
-% データベースには画像の保存先を記録する設計とします。
-% 画像は公開せず、本人の閲覧権限を確認して取得します。
-
-% 画像から数値を読み取る場合は、
-% 結果を利用者に表示し、確認・修正後に確定します。
-% 身長・体重・最低血圧・最高血圧のいずれかが
-% 取得できない場合は手入力を求めます。
-% 確認前の数値は目標設定に使用しません。
-
-% 読み取り前の段階では四項目が未設定でも一時保存できますが、
-% 確認済みに変更する際には四項目が入力されていることを確認します。
-
-% プロフィールの身長・体重と健康診断時の数値は、
-% 測定時点が異なるため別に保存します。
-
-\subsection{追加検査項目情報}
-
-% 必須の四項目以外の検査結果を保存します。
-% 追加検査項目を扱わない場合は、本テーブルは不要です。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{追加検査項目情報}
-\label{tab:checkup_item}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:checkup_item}：追加検査項目情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-検査項目ID & checkup\_item\_id & BIGINT & PK &
-検査項目を識別する番号です。\\ \hline
-
-健康診断結果ID & checkup\_id & BIGINT & FK・必須 &
-対応する健康診断結果です。\\ \hline
-
-検査項目名 & item\_name & VARCHAR(100) & 必須 &
-血糖値などの項目名です。\\ \hline
-
-検査結果 & result\_value & VARCHAR(100) & 必須 &
-数値や文字による結果です。\\ \hline
-
-単位 & unit & VARCHAR(30) & 任意 &
-検査値の単位です。\\ \hline
-
-判定 & assessment & VARCHAR(100) & 任意 &
-診断書に記載された判定です。\\ \hline
-\end{longtable}
-
-% 診断書に記載された判定を保存するものであり、
-% 本システムが医学的な判定を新たに付けるものではありません。
-
-\subsection{AI提案候補情報}
-
-% AIが提示した目標・実行計画・タスクの候補を保存します。
-% 複数の候補を返した場合は、
-% 候補ごとに一件ずつ保存します。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{AI提案候補情報}
-\label{tab:proposal}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:proposal}：AI提案候補情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-提案候補ID & proposal\_id & BIGINT & PK &
-個別の候補を識別する番号です。\\ \hline
-
-提案要求ID & request\_id & BIGINT & 必須 &
-一回の生成で返された候補をまとめる番号です。\\ \hline
-
-利用者ID & user\_id & BIGINT & FK・必須 &
-提案を受ける利用者です。\\ \hline
-
-健康診断結果ID & checkup\_id & BIGINT & FK・任意 &
-提案時に参考にした健診結果です。\\ \hline
-
-候補番号 & candidate\_no & INT & 必須 &
-同じ生成結果内での候補の順番です。\\ \hline
-
-目標候補 & goal\_text & TEXT & 必須 &
-AIが返した目標の内容です。\\ \hline
-
-実行計画候補 & plan\_text & TEXT & 必須 &
-目標に向けた計画です。\\ \hline
-
-タスク候補 & task\_candidates & JSON & 必須 &
-内容・回数・時間などを持つタスクの一覧です。\\ \hline
-
-選択状態 & status & VARCHAR(20) & 必須 &
-未選択・採用・不採用を管理します。\\ \hline
-
-生成日時 & generated\_at & DATETIME & 必須 &
-候補を生成した日時です。\\ \hline
-\end{longtable}
-
-% 提案要求IDと候補番号の組合せを一意とします。
-
-% AIからの回答は保存前に形式を検査します。
-% 必要項目が欠けている場合は、
-% 正常な候補として扱いません。
-
-% 利用者が候補を選択した場合は、
-% その候補を採用状態にし、
-% 目標・実行計画情報とタスク情報を作成します。
-% 利用者が修正した内容は採用先に保存し、
-% AIが返した元の候補と区別します。
-
-\subsection{目標・実行計画情報}
-
-% 利用者が採用した目標と実行計画を保存します。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{目標・実行計画情報}
-\label{tab:goal}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:goal}：目標・実行計画情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-目標ID & goal\_id & BIGINT & PK &
-採用した目標を識別する番号です。\\ \hline
-
-利用者ID & user\_id & BIGINT & FK・必須 &
-目標を設定した利用者です。\\ \hline
-
-提案候補ID & proposal\_id & BIGINT & FK・任意 &
-元になったAI候補です。手動設定時は未設定です。\\ \hline
-
-対象項目 & category & VARCHAR(20) & 必須 &
-食事・運動・睡眠などの対象です。\\ \hline
-
-目標内容 & goal\_text & TEXT & 必須 &
-利用者が決定した目標です。\\ \hline
-
-実行計画 & plan\_text & TEXT & 必須 &
-目標に向けた取り組み方です。\\ \hline
-
-開始日 & start\_date & DATE & 必須 &
-取り組みを開始する日です。\\ \hline
-
-達成期限 & due\_date & DATE & 任意 &
-目標の達成期限です。\\ \hline
-
-目標状態 & status & VARCHAR(20) & 必須 &
-実施中・完了・中止を管理します。\\ \hline
-
-登録日時 & created\_at & DATETIME & 必須 &
-目標を設定した日時です。\\ \hline
-
-更新日時 & updated\_at & DATETIME & 必須 &
-内容を変更した日時です。\\ \hline
-\end{longtable}
-
-% 利用者が目標を変更しても、
-% 過去に実施したタスクの内容や結果を上書きしないようにします。
-% 変更後の内容は、今後実施するタスクに反映します。
-
-\subsection{タスク・達成状況情報}
-
-% 目標に向けて実施する個々のタスクと、
-% その達成状況を保存します。
-% 例えば「11月9日に10分歩く」を一件のタスクとして扱います。
-
-\begin{longtable}{|L{25mm}|L{34mm}|L{26mm}|L{19mm}|L{43mm}|}
-\caption{タスク・達成状況情報}
-\label{tab:task}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{5}{|l|}{表\ref{tab:task}：タスク・達成状況情報（続き）}\\
-\hline
-項目名 & カラム名 & データ型 & 制約 & 説明 \\ \hline
-\endhead
-
-タスクID & task\_id & BIGINT & PK &
-個別のタスクを識別する番号です。\\ \hline
-
-目標ID & goal\_id & BIGINT & FK・必須 &
-対応する目標です。\\ \hline
-
-タスク名 & task\_title & VARCHAR(100) & 必須 &
-一覧に表示する短い名称です。\\ \hline
-
-タスク内容 & task\_description & TEXT & 必須 &
-実施する具体的な内容です。\\ \hline
-
-実施予定日 & scheduled\_date & DATE & 必須 &
-タスクを実施する日です。\\ \hline
-
-判定指標 & metric & VARCHAR(50) & 任意 &
-時間・回数などの判定対象です。\\ \hline
-
-目標下限値 & target\_min & DECIMAL(10,2) & 任意 &
-達成に必要な下限値です。\\ \hline
-
-目標上限値 & target\_max & DECIMAL(10,2) & 任意 &
-範囲で判定する場合の上限値です。\\ \hline
-
-単位 & unit & VARCHAR(20) & 任意 &
-分・回・時間などの単位です。\\ \hline
-
-実績値 & actual\_value & DECIMAL(10,2) & 任意 &
-利用者が登録した実施結果です。\\ \hline
-
-達成状態 & status & VARCHAR(20) & 必須 &
-未記録・未達成・達成・取消を管理します。\\ \hline
-
-実施結果メモ & result\_note & TEXT & 任意 &
-数値以外の実施結果や補足です。\\ \hline
-
-達成日時 & achieved\_at & DATETIME & 任意 &
-達成した日時です。\\ \hline
-
-更新日時 & updated\_at & DATETIME & 必須 &
-実施結果を最後に変更した日時です。\\ \hline
-\end{longtable}
-
-% 毎日繰り返すタスクは、
-% 実施予定日ごとに別のタスクとして保存します。
-% これにより、昨日は達成、今日は未達成という状態を区別できます。
-
-% 数値で判定する場合は、
-% タスクに保存した条件と実績値を比較します。
-% 例えば「10分以上歩く」は、
-% 判定指標を運動時間、目標下限値を10、
-% 単位を分として保存します。
-
-% 数値で判定できないタスクについては、
-% 本人による完了登録を使用するかを別途決めます。
-
-% 未記録と未達成は区別します。
-% 実績をまだ入力していない状態を、
-% そのまま確定した未達成として扱わないようにします。
-
-% 経験値や企業共有ペットへの反映は、
-% ペット育成機能で定めた締切・判定ルールに従います。
-
-\subsection{目標・タスクの保存例}
-
-% AIが返した候補を利用者が採用した場合の保存例を示します。
-% 以下はデータ構造を説明するための例です。
-
-\begin{longtable}{|L{40mm}|L{116mm}|}
-\caption{目標・タスクの保存例}
-\label{tab:example}\\
-\hline
-保存項目 & 保存内容の例 \\ \hline
-\endfirsthead
-
-\hline
-保存項目 & 保存内容の例 \\ \hline
-\endhead
-
-AIの目標候補 &
-日々の生活に歩く時間を取り入れます。\\ \hline
-
-AIの実行計画候補 &
-利用者が設定した空き時間に、歩く予定を配置します。\\ \hline
-
-AIのタスク候補 &
-昼休みに10分歩きます。\\ \hline
-
-利用者が採用した目標 &
-日々の生活に歩く時間を取り入れます。\\ \hline
-
-利用者が採用・修正した計画 &
-平日の昼休みに歩く予定を設定します。\\ \hline
-
-タスク名 &
-昼休みのウォーキング\\ \hline
-
-実施予定日 &
-2026年11月9日\\ \hline
-
-判定指標 &
-運動時間\\ \hline
-
-目標下限値・単位 &
-10分\\ \hline
-
-実績値 &
-12分\\ \hline
-
-達成状態 &
-達成\\ \hline
-\end{longtable}
-
-% \clearpage
-
-\section*{保存項目と保存先の対応}
-
-\begin{longtable}{|L{56mm}|L{100mm}|}
-\caption{担当範囲の保存項目と保存先}
-\label{tab:mapping}\\
-\hline
-保存する情報 & 保存先・参照方法 \\ \hline
-\endfirsthead
-
-\hline
-\multicolumn{2}{|l|}{表\ref{tab:mapping}：担当範囲の保存項目と保存先（続き）}\\
-\hline
-保存する情報 & 保存先・参照方法 \\ \hline
-\endhead
-
-リーダーのメールアドレス・パスワード &
-既存の利用者情報を参照します。
-パスワードはハッシュ値で管理します。\\ \hline
-
-グループ名 &
-グループ情報に保存します。\\ \hline
-
-グループのペット名 &
-共有ペット情報に保存し、グループから参照します。\\ \hline
-
-所属メンバー名・メールアドレス &
-グループ所属情報と利用者情報を組み合わせて取得します。\\ \hline
-
-企業名・契約人数 &
-企業情報・企業契約情報に保存します。\\ \hline
-
-各社員のメールアドレス &
-利用者情報に保存し、
-社員利用権情報で企業と結び付けます。\\ \hline
-
-診断書写真・必須の四項目 &
-健康診断結果情報で管理します。
-画像そのものは画像保存領域に保存します。\\ \hline
-
-AIが返した目標・計画・タスク &
-AI提案候補情報に保存します。\\ \hline
-
-利用者が選択した内容 &
-目標・実行計画情報とタスク情報に保存します。\\ \hline
-
-各タスクの達成状況 &
-タスク・達成状況情報に保存します。\\ \hline
-\end{longtable}
-
-\subsection{生活習慣管理・AI提案機能}
-        \begin{table}[h]
-        \centering
-        \caption{睡眠管理}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         sleeptime & VARCHAR & 4 & 〇 &  &就寝時間 \\
-         getuptime & VARCHAR & 4 & 〇 &  &起床時間\\
-         condition & VARCHAR & 3 & 〇 & & 休養感（良　普　悪）\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-
-        \begin{table}[h]
-        \centering
-        \caption{食事管理}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         photo & BLOB & - &  &  &写真 \\ %写真の定義の仕方わからん
-         kcal & VARCHAR & 4 &  &  &摂取カロリー\\
-         balance & VARCHAR & 255 &  & & PFCバランス\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-
-        \begin{table}[h]
-        \centering
-        \caption{運動管理機能}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         ex\_plan & VARCHAR & 4 & 〇 &  &運動の実施予定 \\
-         ex\_type & VARCHAR & 4 & 〇 &  &運動の種類\\
-         consume\_kcal & VARCHAR & 3 & 〇 & & 消費カロリー\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-        \begin{table}[h]
-        \centering
-        \caption{体重管理機能}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         date & VARCHAR & 8 & 〇 &  &測定日 \\
-         weight & VARCHAR & 3 & 〇 &  &体重\\
-        \hline
-        \end{tabular}
-        \end{table}
-
-\subsection{ペット育成機能}
-        \begin{table}[H]
-        \centering
-        \caption{ペット育成機能(個人用)}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         userid & INTEGER & 20 & 〇 &  & ユーザーid \\%主キー、外部キー
-         experience & INTEGER & 10 & 〇 & 0以上10億未満 & 累積経験値 \\
-         petLevel & INTEGER & 2 & 〇 &  & ペットのレベル \\
-         petTypeld & INTEGER & 2 & 〇 & & ペットの種類 \\%ペットのタイプはおそらく一桁で大丈夫だが、増えることを考えて
-        \hline
-        \end{tabular}
-        \end{table}
-
-        \begin{table}[H]
-        \centering
-        \caption{ペット育成機能(企業用)}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         companyid & INTEGER & 20 & 〇 &  & ユーザーid \\%主キー、外部キー
-         companyExperience & INTEGER & 10 & 〇 & 0以上10億未満 & 累積経験値 \\
-         companyPetLevel & INTEGER & 2 & 〇 &  & ペットのレベル \\
-         companyPetTypeld & INTEGER & 2 & 〇 & & ペットの種類 \\%ペットのタイプはおそらく一桁で大丈夫だが、増えることを考えて
-        \hline
-        \end{tabular}
-        \end{table}
-
-        \begin{table}[H]
-        \centering
-        \caption{ペット情報}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         petTypeld & INTEGER & 20 & 〇 &  & ペットのid \\%主キー、外部キー
-         petName & VARCHAR & 50 & 〇 & ペットの名前 \\
-        \hline
-        \end{tabular}
-        \end{table}
-
-        \begin{table}[H]
-        \centering
-        \caption{ペット情報（個人）}
-        \begin{tabular}{c|c|c|c|c|c}
-        \hline
-        変数名 & データ型 & 長さ & NOT NULL & その他制約 & 説明 \\
-        \hline
-         userid & INTEGER & 20 & 〇 & & 個人を特定するためのuserid \\
-         pet1Get & INTEGER & 24 & 〇 &  & 8ケタ(ゲット日)、8ケタ(進化日)、8ケタ(進化日) \\
-         pet1Experience & INTEGER & 10 & & & ペット1の累計経験値 \\
-         pet2Get & INTEGER & 24 & 〇 &  & 8ケタ(ゲット日)、8ケタ(進化日)、8ケタ(進化日) \\
-         pet2Experience & INTEGER & 10 & & & ペット2の累計経験値 \\
-         pet3Get & INTEGER & 24 & 〇 &  & 8ケタ(ゲット日)、8ケタ(進化日)、8ケタ(進化日) \\
-         pet3Experience & INTEGER & 10 & & & ペット3の累計経験値 \\
-         \hline
-        \end{tabular}
-        \end{table}
-
-%9
+\subsection{制約条件の略語}
+\begin{itemize}
+    \item PK：主キー
+    \item FK：外部キー
+    \item NN：NOT NULL
+    \item AI：AUTO INCREMENT
+    \item DF：DEFAULT
+    \item UQ：UNIQUE
+    \item CHECK：検査制約
+\end{itemize}
+
+\subsection{ER図}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{ER図.png}
+    \caption{ER図}
+    \label{fig:er}
+\end{figure}
+
+\subsection{アカウント・企業管理}
+
+\DBTable{users（ユーザー情報）}{
+    \code{account_id}     & INTEGER      & PK, NN, AI     & 内部管理用のユーザーID\\ \hline
+    \code{company_id}     & INTEGER      & FK,            & 企業コード\\ \hline
+    \code{user_id}        & VARCHAR(50)  & NN             & ログイン時に入力するID\\ \hline
+    \code{email}          & VARCHAR(255) & NN, UQ         & メールアドレス\\ \hline
+    \code{password}       & VARCHAR(255) & NN             & ハッシュ化したパスワード\\ \hline
+    \code{role}           & VARCHAR(20)  & NN, CHECK      & 権限 \\
+                          &              &                & CHECK（normal, admin, operator）\\ \hline
+    \code{status}         & VARCHAR(20)  & NN, CHECK, DF  & 利用状況 \\
+                          &              &                & CHECK（active, suspended, ended）\\
+                          &              &                & DF = active\\ \hline
+    \code{is_first_login} & BOOLEAN      & NN, DF         & 初回ログインかどうか\\
+                          &              &                & DF = TRUE（初回）\\ \hline
+}
+
+\DBTable{companies（企業情報）}{
+    \code{company_id}            & VARCHAR(50)  & PK, NN    & 企業コード\\ \hline
+    \code{company_name}          & VARCHAR(255) & NN, UQ    & 企業名\\ \hline
+    \code{phone_number}          & VARCHAR(20)  & NN        & 企業の連絡先電話番号\\ \hline
+    \code{email}                 & VARCHAR(255) & NN        & 企業の連絡先メールアドレス\\ \hline
+    \code{contract_people_count} & INTEGER      & NN, CHECK & 契約人数\\
+                                 &              &           & CHECK（1以上）\\ \hline
+    \code{contract_start_date}   & DATE         & NN        & 契約開始日\\ \hline
+    \code{contract_end_date}     & DATE         & NN        & 契約終了日\\ \hline
+    \code{usage_status}          & VARCHAR(20)  & NN, CHECK & 利用ステータス\\
+                                 &              &           & CHECK（before\_start, active, suspended, ended）\\ \hline
+}
+
+\DBTable{password\_reset\_tokens（パスワード再設定情報）}{
+    \code{account_id}        & INTEGER      & PK, FK, NN & 内部管理用のユーザーID\\ \hline
+    \code{verification_code} & VARCHAR(255) & NN         & ハッシュ化した認証コード\\ \hline
+    \code{expires_at}        & DATE         & NN         & 認証コード有効期限\\ \hline
+}
+
+\DBTable{user\_profiles（プロフィール情報）}{
+    \code{account_id}               & INTEGER      & PK, FK, NN & 内部管理用のユーザーID\\ \hline
+    \code{gender}                   & VARCHAR(10)  & CHECK      & 性別\\
+                                    &              &            & CHECK（male, female, other）\\ \hline
+    \code{exercise_experience}      & VARCHAR(20)  & CHECK      & 運動経験\\
+                                    &              &            & CHECK（beginner, intermediate, advanced）\\ \hline
+    \code{checkup_date}             & DATE         & NN         & 健康診断受診日\\ \hline
+    \code{result_judgment}          & VARCHAR(50)  & NN         & 検査結果の判定\\ \hline
+    \code{doctor_instruction}       & TEXT         & NN         & 医師からの指示\\ \hline
+    \code{height}                   & DECIMAL(5,2) & NN         & 身長（cm）\\ \hline
+    \code{weight}                   & DECIMAL(5,2) & NN         & 体重（kg）\\ \hline
+    \code{systolic_blood_pressure}  & INTEGER      & NN         & 最高血圧（mmHg）\\ \hline
+    \code{diastolic_blood_pressure} & INTEGER      & NN         & 最低血圧（mmHg）\\ \hline
+    \code{waist_circumference}      & DECIMAL(5,2) & --         & 腹囲（cm）\\ \hline
+    \code{fasting_blood_glucose}    & DECIMAL(5,2) & --         & 空腹時血糖値\\ \hline
+    \code{hba1c}                    & DECIMAL(4,2) & --         & HbA1c（\%）\\ \hline
+    \code{ldl_cholesterol}          & INTEGER      & --         & LDLコレステロール\\ \hline
+    \code{hdl_cholesterol}          & INTEGER      & --         & HDLコレステロール\\ \hline
+    \code{triglycerides}            & INTEGER      & --         & 中性脂肪\\ \hline
+    \code{ast}                      & INTEGER      & --         & AST\\ \hline
+    \code{alt}                      & INTEGER      & --         & ALT\\ \hline
+}
+
+\subsection{健康情報管理}
+
+\DBTable{weight\_records（体重情報）}{
+    \code{weight_record_id} & INTEGER      & PK, NN, AI & 体重記録ID\\ \hline
+    \code{account_id}       & INTEGER      & FK, NN     & 内部管理用のユーザーID\\ \hline
+    \code{weight}           & DECIMAL(5,2) & NN, CHECK  & 体重（kg）\\
+                            &              &            & CHECK（0より大きい）\\ \hline
+    \code{weight_date}      & DATE         & NN         & 体重を記録した日\\ \hline
+}
+
+\DBTable{meal\_records（食事情報）}{
+    \code{meal_record_id} & INTEGER      & PK, NN, AI & 食事記録ID\\ \hline
+    \code{account_id}     & INTEGER      & FK, NN     & 内部管理用のユーザーID\\ \hline
+    \code{meal_date}      & DATE         & NN         & 食事を記録した日\\ \hline
+    \code{meal_content}   & DECIMAL(5,2) & NN         & 1日に食べたもの\\ \hline
+    \code{calories}       & DECIMAL(7,2) & --         & 1日の摂取カロリー（kcal）\\ \hline
+    \code{protein}        & DECIMAL(6,2) & --         & たんぱく質（g）\\ \hline
+    \code{fat}            & DECIMAL(6,2) & --         & 脂質（g）\\ \hline
+    \code{carbohydrates}  & DECIMAL(6,2) & --         & 炭水化物（g）\\ \hline
+}
+
+\DBTable{sleep\_records（睡眠情報）}{
+    \code{sleep_record_id} & INTEGER      & PK, NN, AI & 睡眠記録ID\\ \hline
+    \code{account_id}      & INTEGER      & FK, NN     & 内部管理用のユーザーID\\ \hline
+    \code{sleep_date}      & DATE         & NN         & 睡眠を記録した日\\ \hline
+    \code{sleep_duration}  & DECIMAL(4,2) & NN, CHECK  & 睡眠時間（時間）\\
+                           &              &            & CHECK（0以上24以下）\\ \hline
+}
+
+\DBTable{exercise\_records（運動情報）}{
+    \code{exercise_record_id} & INTEGER      & PK, NN, AI & 運動記録ID\\ \hline
+    \code{account_id}         & INTEGER      & FK, NN     & 内部管理用のユーザーID\\ \hline
+    \code{exercise_date}      & DATE         & NN         & 運動を記録した日\\ \hline
+    \code{exercise_content}   & TEXT         & NN         & 一日に行った運動内容\\ \hline
+    \code{exercise_duration}  & INTEGER      & NN, CHECK  & 運動時間（分）\\
+                              &              &            & CHECK（0より大きい）\\ \hline
+    \code{calories_burned}    & DECIMAL(7,2) & NN, CHECK  & 1日の推定消費カロリー（kcal）\\
+                              &              &            & CHECK（0より大きい）\\ \hline
+}
+
+\subsection{目標・タスク管理}
+
+\DBTable{health\_goals（目標情報）}{
+    \code{account_id}   & INTEGER & PK, FK, NN & 内部管理用のユーザーID\\ \hline
+    \code{goal_content} & TEXT    & NN         & 長期目標の内容\\ \hline
+    \code{start_date}   & DATE    & NN         & 目標開始日\\ \hline
+    \code{end_date}     & DATE    & NN         & 目標達成期限\\ \hline
+}
+
+\DBTable{daily\_tasks（タスク情報）}{
+    \code{task_id}       & INTEGER     & PK, NN, AI    & タスクID\\ \hline
+    \code{account_id}    & INTEGER     & FK, NN        & 内部管理用のユーザーID\\ \hline
+    \code{task_date}     & DATE        & NN            & タスクを設定した日\\ \hline
+    \code{task_category} & VARCHAR(20) & NN, CHECK     & タスクの種類\\
+                         &             &               & CHECK（meal, sleep, exercise）\\ \hline
+    \code{task_content}  & TEXT        & NN            & タスクの内容\\ \hline
+    \code{is_completed}  & BOOLEAN     & NN, DF        & 達成したかどうか\\
+                         &             &               & DF = FALSE（未達成）\\ \hline
+}
+
+\DBTable{monthly\_task\_summaries（月間タスク達成情報）}{
+    \code{account_id}               & INTEGER & PK, FK, NN    & 内部管理用のユーザーID\\ \hline
+    \code{target_month}             & DATE    & PK, NN        & 集計対象月（月初の日付）\\ \hline
+    \code{meal_completed_count}     & INTEGER & NN, DF, CHECK & 食事タスクの達成数\\
+                                    &         &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{meal_task_count}          & INTEGER & NN, DF, CHECK & 食事タスクの設定数\\
+                                    &         &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{sleep_completed_count}    & INTEGER & NN, DF, CHECK & 睡眠タスクの達成数\\
+                                    &         &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{sleep_task_count}         & INTEGER & NN, DF, CHECK & 睡眠タスクの設定数\\
+                                    &         &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{exercise_completed_count} & INTEGER & NN, DF, CHECK & 運動タスクの達成数\\
+                                    &         &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{exercise_task_count}      & INTEGER & NN, DF, CHECK & 運動タスクの設定数\\
+                                    &         &               & DF = 0, CHECK（0以上）\\ \hline
+}
+
+\subsection{ペット管理}
+
+\DBTable{pet\_types（ペット種類・形態情報）}{
+    \code{pet_type_name} & VARCHAR(50) & PK, NN         & ペットの種類名\\ \hline
+    \code{form_number}   & INTEGER     & PK, NN, CHECK  & 進化段階\\
+                         &             &                & CHECK（-1以上2以下）\\ \hline
+    \code{form_name}     & VARCHAR(50) & NN             & 形態名\\ \hline
+    \code{description}   & TEXT        & --             & ペットの説明\\ \hline
+}
+
+\DBTable{user\_pets（個人用ペット情報）}{
+    \code{pet_id}            & INTEGER     & PK, NN, AI    & ペットID\\ \hline
+    \code{account_id}        & INTEGER     & FK, NN        & 内部管理用のユーザーID\\ \hline
+    \code{pet_type_name}     & VARCHAR(50) & FK, NN        & ペットの種類名\\ \hline
+    \code{form_number}       & INTEGER     & FK, NN        & 現在の進化段階\\ \hline
+    \code{pet_name}          & VARCHAR(50) & NN            & ペットの名前\\ \hline
+    \code{level}             & INTEGER     & NN, DF, CHECK & ペットのレベル\\
+                             &             &               & DF = 1, CHECK（-5以上15以下）\\ \hline
+    \code{experience_points} & INTEGER     & NN, DF, CHECK & 現在の経験値\\
+                             &             &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{birthday}          & DATE        & NN, DF        & ペットが誕生した日\\
+                             &             &               & DF = CURRENT\_DATE\\ \hline
+    \code{is_current}        & BOOLEAN     & NN, DF        & 現在育てているペットか\\
+                             &             &               & DF = TRUE（現在育てているペットである）\\ \hline
+}
+
+\DBTable{company\_pets（企業共有ペット情報）}{
+    \code{pet_id}            & INTEGER     & PK, NN, AI    & ペットID\\ \hline
+    \code{company_id}        & VARCHAR(50) & FK, NN        & 企業コード\\ \hline
+    \code{pet_type_name}     & VARCHAR(50) & FK, NN        & ペットの種類名\\ \hline
+    \code{form_number}       & INTEGER     & FK, NN        & 現在の進化段階\\ \hline
+    \code{pet_name}          & VARCHAR(50) & NN            & ペットの名前\\ \hline
+    \code{level}             & INTEGER     & NN, DF, CHECK & ペットのレベル\\
+                             &             &               & DF = 1, CHECK（-5以上15以下）\\ \hline
+    \code{experience_points} & INTEGER     & NN, DF, CHECK & 現在の経験値\\
+                             &             &               & DF = 0, CHECK（0以上）\\ \hline
+    \code{birthday}          & DATE        & NN, DF        & ペットが誕生した日\\
+                             &             &               & DF = CURRENT\_DATE\\ \hline
+    \code{is_current}        & BOOLEAN     & NN, DF        & 現在育てているペットか\\
+                             &             &               & DF = TRUE（現在育てているペットである）\\ \hline
+}
+
+\subsection{外部キー・複合キーの補足}
+\begin{itemize}[leftmargin=2em]
+  \item \code{users.company_id} 、\code{company_pets.company_id}は \code{companies.company_id} を参照する。
+  \item \code{password_reset_tokens.account_id} 、 \code{user_profiles.account_id} 、\code{weight_records.account_id}、
+        \code{meal_records.account_id}、\code{sleep_records.account_id}、\code{exercise_records.account_id}、
+        \code{health_goals.account_id}、\code{daily_tasks.account_id}、\code{monthly_task_summaries.account_id}、
+        \code{user_pets.account_id}は \code{users.account_id} を参照する。
+  \item \code{user_pets} と \code{company_pets} の \code{pet_type_name} と \code{form_number} は、\code{pet_types} の複合主キーを参照する。
+  \item \code{users} の \code{company_id} と \code{user_id} は複合UNIQUE制約。
+  \item \code{weight_records} の \code{account_id} と \code{weight_date}を組み合わせた複合UNIQUE制約。
+  \item \code{meal_records} の \code{account_id} と \code{meal_date}を組み合わせた複合UNIQUE制約。
+  \item \code{sleep_records} の \code{account_id} と \code{sleep_date}を組み合わせた複合UNIQUE制約。
+  \item \code{exercise_records} の \code{account_id} と \code{exercise_date}を組み合わせた複合UNIQUE制約。
+  \item \code{daily_tasks} は \code{account_id}、\code{task_date}、\code{task_category} の3カラムで複合UNIQUE制約。
+  \item \code{monthly_task_summaries} は \code{account_id} と \code{target_month} の複合主キー。
+  \item \code{pet_types} は \code{pet_type_name} と \code{form_number} の複合主キー。
+\end{itemize}
+
+
+%7
 \section{ネットワーク設計}
 \ref{fig:2}はにおけるネットワーク構成である。
 アプリケーションの実行基盤となるWebサーバーは
