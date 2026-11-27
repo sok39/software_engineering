@@ -1,16 +1,15 @@
 %\documentclass[uplatex,dvipdfmx]{jlreq}
 \documentclass{jlreq}
 \usepackage{amsmath,amssymb, listings, graphicx, float, hyperref, subcaption}
-\usepackage{luatexja}
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{geometry}
 \usepackage{caption}
 \usepackage{booktabs}
 \usepackage{enumitem}
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{url}
+\newcommand{\code}[1]{\url{#1}}
 
-\renewcommand{\tablename}{表}
 \newcommand{\DBTable}[2]{%
 \small
 \begin{longtable}{|>{\raggedright\arraybackslash}p{0.19\textwidth}|
@@ -22,9 +21,6 @@
   \textbf{カラム名} & \textbf{データタイプ} & \textbf{制約条件} & \textbf{説明・補足}\\
   \hline
   \endfirsthead
-  \hline
-  \textbf{カラム名} & \textbf{データタイプ} & \textbf{制約条件} & \textbf{説明・補足}\\
-  \hline
   \endhead
   #2
 \end{longtable}
